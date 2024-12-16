@@ -3,10 +3,11 @@ const baseUrl = "https://restcountries.com/v3.1";
 const cardsContainer = document.querySelector(".country__cards");
 const loadCardsBtn = document.querySelector(".load__country");
 
-loadCardsBtn.addEventListener("click", function () {
-    // fetchCountryData_AJAX("india");
-    fetchCountryData_Fetch("india");
+loadCardsBtn.addEventListener("click", async function () {
     loadCardsBtn.classList.add("hide");
+    // fetchCountryData_AJAX("india");
+    // fetchCountryData_Fetch("india");
+    await fetchCountryData_Async("india");
 });
 
 // ( CallBack Hell )
@@ -98,6 +99,37 @@ function fetchCountryData_Fetch(countryName) {
             const url_alpha = `${baseUrl}/alpha/${neighbourAlpha}`;
             return fetch(url_alpha);
         });
+}
+
+async function fetchCountryData_Async(countryName) {
+    let countryCount = 1;
+
+    const url_name = `${baseUrl}/name/${countryName}`;
+    const data1 = await fetchData(url_name);
+
+    const countryData1 = data1.at(0);
+    displayCountryCard(countryData1, countryCount++);
+    const neighbourAlpha1 = getRandomBorderAlpha(countryData1.borders);
+
+    const url_alpha1 = `${baseUrl}/alpha/${neighbourAlpha1}`;
+    const data2 = await fetchData(url_alpha1);
+
+    const countryData2 = data2.at(0);
+    displayCountryCard(countryData2, countryCount++);
+    const neighbourAlpha2 = getRandomBorderAlpha(countryData2.borders);
+
+    const url_alpha2 = `${baseUrl}/alpha/${neighbourAlpha2}`;
+    const data3 = await fetchData(url_alpha2);
+
+    const countryData3 = data3.at(0);
+    displayCountryCard(countryData3, countryCount++);
+    const neighbourAlpha3 = getRandomBorderAlpha(countryData3);
+}
+
+async function fetchData(url) {
+    const res = await fetch(url);
+    const data = await res.json();
+    return data;
 }
 
 function displayCountryCard(coutryData, countryCount) {
