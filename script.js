@@ -4,7 +4,8 @@ const cardsContainer = document.querySelector(".country__cards");
 const loadCardsBtn = document.querySelector(".load__country");
 
 loadCardsBtn.addEventListener("click", function () {
-    fetchCountryData_AJAX("india");
+    // fetchCountryData_AJAX("india");
+    fetchCountryData_Fetch("india");
     loadCardsBtn.classList.add("hide");
 });
 
@@ -58,6 +59,45 @@ function fetchCountryData_AJAX(countryName) {
             });
         });
     });
+}
+
+function fetchCountryData_Fetch(countryName) {
+    let countryCount = 1;
+    const url_name = `${baseUrl}/name/${countryName}`;
+    fetch(url_name)
+        .then(function (res) {
+            return res.json();
+        })
+        .then(function (data) {
+            const countryData = data.at(0);
+            displayCountryCard(countryData, countryCount++);
+            const neighbourAlpha = getRandomBorderAlpha(countryData.borders);
+
+            const url_alpha = `${baseUrl}/alpha/${neighbourAlpha}`;
+            return fetch(url_alpha);
+        })
+        .then(function (res) {
+            return res.json();
+        })
+        .then(function (data) {
+            const countryData = data.at(0);
+            displayCountryCard(countryData, countryCount++);
+            const neighbourAlpha = getRandomBorderAlpha(countryData.borders);
+
+            const url_alpha = `${baseUrl}/alpha/${neighbourAlpha}`;
+            return fetch(url_alpha);
+        })
+        .then(function (res) {
+            return res.json();
+        })
+        .then(function (data) {
+            const countryData = data.at(0);
+            displayCountryCard(countryData, countryCount++);
+            const neighbourAlpha = getRandomBorderAlpha(countryData.borders);
+
+            const url_alpha = `${baseUrl}/alpha/${neighbourAlpha}`;
+            return fetch(url_alpha);
+        });
 }
 
 function displayCountryCard(coutryData, countryCount) {
